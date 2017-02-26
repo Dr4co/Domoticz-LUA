@@ -24,6 +24,32 @@
 --
 commandArray = {}
 
+--[[
+    Example Block Comment
+--]]
+
+--[[
+    Flow
+    
+    Desired Feature: Dummy Switch [1, 2, 3, 4] hours delay.
+    
+    1) Is it after 22:30?`
+        AND
+    2) If no activity in ~40 minutes
+        AND
+    3) If "Sovdags" Switch has not been triggered in MORE than 21-23h.
+    
+        THEN
+    Toggle "Sovdags" Switch
+    
+    4) Delay - Delay 'Sovdags' with X hours from when it is triggered [Last Updated]
+        (If the switch was toggled the same DAY as current DAY (currentTime).
+        
+        OR
+        
+    5) Delay 'Sovdags' from original 22:30? + Delay X hours
+    
+--]]
 -- Flow 
 -- If Weekday (
 --
@@ -82,9 +108,33 @@ SWITCH_DEVICE = 'Sovdags'
             print("It is Thursday today!")
         end
         
+        --- Weekday = 0 (Sunday), 5 (Friday), 6 (Saturday)
+---        if ((tonumber(os.date("%w", currentTime)) == 0) or (tonumber(os.date("%w", currentTime)) == 5)
+---            or (tonumber(os.date("%w", currentTime)) == 6)) then
+---            print("It is a weekday! Yey!")
+---        else
+---        --- Weekday (Monday - Thursday)    
+---        
+---        end
+        
+        
         -- 2017-02-23 21:57:37.554 LUA: It is a weekday! Yey!
-        if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 5)) then
+        -- Weekday (Fridays are excluded.. =))
+        if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 4)) then
             print("It is a weekday! Yey!")
+            
+            if (tonumber(os.date("%H", currentTime)) >= 22) then
+                print(">= 22: " .. tonumber(os.date("%H", currentTime)))
+            end
+        --end
+        -- It is not a weekday! (Fridays are includeded as weekends.. =))
+        else
+            -- It's a weekend! Yey!    
+            -- %H	hour, using a 24-hour clock (23) [00-23]
+            if (tonumber(os.date("%H", currentTime)) >= 23) then
+                print(">= 23: " .. tonumber(os.date("%H", currentTime)))
+                -- TOGGLE Sovdags!? If it hasn't been toggled the last 2x hours!?
+            end
         end
     end
 return commandArray
