@@ -192,22 +192,18 @@ if (DEBUG_MODE) then
                 -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
                 -- We have had NO PIR activity for the last X = 35 minutes
                 if (timeSinceLastPIRActivity(currentTime) > 35*60) then
-                    -- print(timeSinceLastPIRActivity(currentTime))
-                    print("No PIR Activity in the last 10 minutes!")
+                    print("No PIR Activity in the last 35 minutes!")
 
-                    --- TOGGLE "Sovdags"
                     print("Smart Automatic Night Script!")
                     
                     -- Send Notification
                     commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
+
+                    --- TOGGLE "Sovdags"
                     commandArray["Sovdags"] = "On"
-                    
-                    -- TODO... Action ON / IN Any PIR in the last 45 MInutes...? Then HOLD!.....
-                    -- Trigger LATER!!!
                 end
             end
         end
-    --end
     -- It is not a weekday! (Fridays are includeded as weekends.. =))
     else
         -- It's a weekend! Yey!    
