@@ -84,47 +84,65 @@ SWITCH_DEVICE = 'Sovdags'
     -- 2017-02-23 21:45:54.006 LUA: minutes: 47
     
     if (DEBUG_MODE) then
-        print("SwitchLastUpdateString: " .. SwitchLastUpdateString)
-        print("RFIDLastUpdateTime: " .. DeviceLastUpdateTime)
-    
-        print("difference: " .. (currentTime - DeviceLastUpdateTime) .. " seconds!")    
+    --        print("SwitchLastUpdateString: " .. SwitchLastUpdateString)
+    --        print("RFIDLastUpdateTime: " .. DeviceLastUpdateTime)
+
+    --        print("difference: " .. (currentTime - DeviceLastUpdateTime) .. " seconds!")    
         -- 2017-02-23 21:49:00.304 LUA: SwitchLastUpdateString: 2017-02-22 22:47:34
         -- 2017-02-23 21:49:00.304 LUA: RFIDLastUpdateTime: 1487800054
         -- 2017-02-23 21:49:00.304 LUA: difference: 82886 seconds!
 
-        print("Hour: " .. hour)
-        print("minutes: " .. minutes)
+    --        print("Hour: " .. hour)
+    --        print("minutes: " .. minutes)
         
         -- %w	weekday (3) [0-6 = Sunday-Saturday]
         
         -- 2017-02-23 21:52:44.007 LUA: DeviceLastUpdateTime (weekday): 3
-        print("DeviceLastUpdateTime (weekday): " .. os.date("%w", DeviceLastUpdateTime))
+    --        print("DeviceLastUpdateTime (weekday): " .. os.date("%w", DeviceLastUpdateTime))
         -- 2017-02-23 21:52:44.007 LUA: currentTime (weekday): 4
-        print("currentTime (weekday): " .. os.date("%w", currentTime))
+    --        print("currentTime (weekday): " .. os.date("%w", currentTime))
         
         -- IS Thursday now!
         -- 2017-02-23 21:59:16.913 LUA: It is Thursday today!
-        if (tonumber(os.date("%w", currentTime)) == 4) then
-            print("It is Thursday today!")
-        end
+        
+        -- if (tonumber(os.date("%w", currentTime)) == 4) then
+        --    print("It is Thursday today!")
+        -- end
         
         --- Weekday = 0 (Sunday), 5 (Friday), 6 (Saturday)
----        if ((tonumber(os.date("%w", currentTime)) == 0) or (tonumber(os.date("%w", currentTime)) == 5)
----            or (tonumber(os.date("%w", currentTime)) == 6)) then
----            print("It is a weekday! Yey!")
----        else
----        --- Weekday (Monday - Thursday)    
----        
----        end
-        
-        
+    ---        if ((tonumber(os.date("%w", currentTime)) == 0) or (tonumber(os.date("%w", currentTime)) == 5)
+    ---            or (tonumber(os.date("%w", currentTime)) == 6)) then
+    ---            print("It is a weekday! Yey!")
+    ---        else
+    ---        --- Weekday (Monday - Thursday)    
+    ---        
+    ---        end
+
         -- 2017-02-23 21:57:37.554 LUA: It is a weekday! Yey!
         -- Weekday (Fridays are excluded.. =))
         if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 4)) then
-            print("It is a weekday! Yey!")
+            -- print("It is a weekday! Yey!")
             
-            if (tonumber(os.date("%H", currentTime)) >= 22) then
-                print(">= 22: " .. tonumber(os.date("%H", currentTime)))
+            -- Current Time is more/after 22:25
+            -- %M	minute (48) [00-59]
+            if ((tonumber(os.date("%H", currentTime)) >= 22) and
+                (tonumber(os.date("%M", currentTime)) >= 15)) then
+                -- print(">= 22: " .. tonumber(os.date("%H", currentTime)))
+                
+                -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
+                if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
+                    --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
+                    
+                    --- TOGGLE "Sovdags"
+                    print("Smart Automatic Night Script!")
+                    
+                    -- Send Notification
+                    commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
+                    commandArray["Sovdags"] = "On"
+                    
+                    -- TODO... Action ON / IN Any PIR in the last 45 MInutes...? Then HOLD!.....
+                    -- Trigger LATER!!!
+                end
             end
         --end
         -- It is not a weekday! (Fridays are includeded as weekends.. =))
