@@ -178,8 +178,9 @@ if (DEBUG_MODE) then
 
         -- Current Time is more/after 22:25
         -- %M	minute (48) [00-59]
-        if ((tonumber(os.date("%H", currentTime)) >= 22) and
-            (tonumber(os.date("%M", currentTime)) >= 15)) then
+        if (
+            ((tonumber(os.date("%H", currentTime)) >= 22) and (tonumber(os.date("%M", currentTime)) >= 15))
+            or (tonumber(os.date("%H", currentTime)) > 23)) then
             -- print(">= 22: " .. tonumber(os.date("%H", currentTime)))
 
             -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
@@ -196,6 +197,8 @@ if (DEBUG_MODE) then
 
                     print("Smart Automatic Night Script!")
                     
+                    currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
+
                     -- Send Notification
                     commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
 
