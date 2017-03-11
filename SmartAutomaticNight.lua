@@ -176,7 +176,7 @@ if (DEBUG_MODE) then
     if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 4)) then
         -- print("It is a weekday! Yey!")
 
-        -- Current Time is more/after 22:25
+        -- Current Time is more/after 22:15
         -- %M	minute (48) [00-59]
         if (
             ((tonumber(os.date("%H", currentTime)) >= 22) and (tonumber(os.date("%M", currentTime)) >= 15))
@@ -212,8 +212,32 @@ if (DEBUG_MODE) then
         -- It's a weekend! Yey!    
         -- %H	hour, using a 24-hour clock (23) [00-23]
         if (tonumber(os.date("%H", currentTime)) >= 23) then
-            print(">= 23: " .. tonumber(os.date("%H", currentTime)))
+            -- print(">= 23: " .. tonumber(os.date("%H", currentTime)))
             -- TOGGLE Sovdags!? If it hasn't been toggled the last 2x hours!?
+            
+            -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
+            if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
+                --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
+
+                --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
+                ---- E.g. 20-25m..?
+
+                -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
+                -- We have had NO PIR activity for the last X = 60 minutes
+                if (timeSinceLastPIRActivity(currentTime) > 60*60) then
+                    print("No PIR Activity in the last 60 minutes!")
+
+                    print("Smart Automatic Night Script!")
+                    
+                    currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
+
+                    -- Send Notification
+                    commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
+
+                    --- TOGGLE "Sovdags"
+                    commandArray["Sovdags"] = "On"
+                end
+            end
         end
     end
 end
