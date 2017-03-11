@@ -62,67 +62,67 @@ currentTime = os.time() --get date/time right now in seconds
 -- %w	weekday (3) [0-6 = Sunday-Saturday]
 
 -- Turn on debugging by changing this variable to {true}, otherwise {false}.
-DEBUG_MODE = true
+DEBUG_MODE = false
 
 -- Your RFID Device Name
 SWITCH_DEVICE = 'Sovdags'
 
 
-    SwitchLastUpdateString = otherdevices_lastupdate[SWITCH_DEVICE]
+SwitchLastUpdateString = otherdevices_lastupdate[SWITCH_DEVICE]
 
-    year = string.sub(SwitchLastUpdateString, 1, 4)
-    month = string.sub(SwitchLastUpdateString, 6, 7)
-    day = string.sub(SwitchLastUpdateString, 9, 10)
-    hour = string.sub(SwitchLastUpdateString, 12, 13)
-    minutes = string.sub(SwitchLastUpdateString, 15, 16)
-    seconds = string.sub(SwitchLastUpdateString, 18, 19)
-    DeviceLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
+year = string.sub(SwitchLastUpdateString, 1, 4)
+month = string.sub(SwitchLastUpdateString, 6, 7)
+day = string.sub(SwitchLastUpdateString, 9, 10)
+hour = string.sub(SwitchLastUpdateString, 12, 13)
+minutes = string.sub(SwitchLastUpdateString, 15, 16)
+seconds = string.sub(SwitchLastUpdateString, 18, 19)
+DeviceLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
 
-    --- Last PIR Activity compared to "Current Time", difference is given in seconds.
-    function timeSinceLastPIRActivity(currentTime)
-        
-        --Read last date/time for each device
-        PIRUppeLastUpdateTimeString = otherdevices_lastupdate['PIR Uppe Burglar']
-        PIRKitchenLastUpdateTimeString = otherdevices_lastupdate['Kitchen Burglar']
-        PIRVRumLastUpdateTimeString = otherdevices_lastupdate['V-Rum Burglar']
-        
-        year = string.sub(PIRUppeLastUpdateTimeString, 1, 4)
-        month = string.sub(PIRUppeLastUpdateTimeString, 6, 7)
-        day = string.sub(PIRUppeLastUpdateTimeString, 9, 10)
-        hour = string.sub(PIRUppeLastUpdateTimeString, 12, 13)
-        minutes = string.sub(PIRUppeLastUpdateTimeString, 15, 16)
-        seconds = string.sub(PIRUppeLastUpdateTimeString, 18, 19)
-        PIRUppeLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
-        
-        year = string.sub(PIRKitchenLastUpdateTimeString, 1, 4)
-        month = string.sub(PIRKitchenLastUpdateTimeString, 6, 7)
-        day = string.sub(PIRKitchenLastUpdateTimeString, 9, 10)
-        hour = string.sub(PIRKitchenLastUpdateTimeString, 12, 13)
-        minutes = string.sub(PIRKitchenLastUpdateTimeString, 15, 16)
-        seconds = string.sub(PIRKitchenLastUpdateTimeString, 18, 19)
-        PIRKitchenLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
-        
-        year = string.sub(PIRVRumLastUpdateTimeString, 1, 4)
-        month = string.sub(PIRVRumLastUpdateTimeString, 6, 7)
-        day = string.sub(PIRVRumLastUpdateTimeString, 9, 10)
-        hour = string.sub(PIRVRumLastUpdateTimeString, 12, 13)
-        minutes = string.sub(PIRVRumLastUpdateTimeString, 15, 16)
-        seconds = string.sub(PIRVRumLastUpdateTimeString, 18, 19)
-        PIRVRumLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
-        
-        -- Last updated PIR device in seconds
-        LastUpdateDevice = math.max(PIRUppeLastUpdateTime, PIRKitchenLastUpdateTime, PIRVRumLastUpdateTime)
+--- Last PIR Activity compared to "Current Time", difference is given in seconds.
+function timeSinceLastPIRActivity(currentTime)
     
-        -- Compare current time with last updated device
-        difference = (os.difftime (currentTime, LastUpdateDevice)) 
-        
-    --    print("SwitchSovdagsLastUpdateTimeString: " .. SwitchSovdagsLastUpdateTimeString)
-        
-    --    print("currentTime: " .. currentTime)
-    --    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
-    --    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
-    --    print("SwitchSovdagsLastUpdateTime + 5h: " .. SwitchSovdagsLastUpdateTime+5*60*60)
-        
+    --Read last date/time for each device
+    PIRUppeLastUpdateTimeString = otherdevices_lastupdate['PIR Uppe Burglar']
+    PIRKitchenLastUpdateTimeString = otherdevices_lastupdate['Kitchen Burglar']
+    PIRVRumLastUpdateTimeString = otherdevices_lastupdate['V-Rum Burglar']
+    
+    year = string.sub(PIRUppeLastUpdateTimeString, 1, 4)
+    month = string.sub(PIRUppeLastUpdateTimeString, 6, 7)
+    day = string.sub(PIRUppeLastUpdateTimeString, 9, 10)
+    hour = string.sub(PIRUppeLastUpdateTimeString, 12, 13)
+    minutes = string.sub(PIRUppeLastUpdateTimeString, 15, 16)
+    seconds = string.sub(PIRUppeLastUpdateTimeString, 18, 19)
+    PIRUppeLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
+    
+    year = string.sub(PIRKitchenLastUpdateTimeString, 1, 4)
+    month = string.sub(PIRKitchenLastUpdateTimeString, 6, 7)
+    day = string.sub(PIRKitchenLastUpdateTimeString, 9, 10)
+    hour = string.sub(PIRKitchenLastUpdateTimeString, 12, 13)
+    minutes = string.sub(PIRKitchenLastUpdateTimeString, 15, 16)
+    seconds = string.sub(PIRKitchenLastUpdateTimeString, 18, 19)
+    PIRKitchenLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
+    
+    year = string.sub(PIRVRumLastUpdateTimeString, 1, 4)
+    month = string.sub(PIRVRumLastUpdateTimeString, 6, 7)
+    day = string.sub(PIRVRumLastUpdateTimeString, 9, 10)
+    hour = string.sub(PIRVRumLastUpdateTimeString, 12, 13)
+    minutes = string.sub(PIRVRumLastUpdateTimeString, 15, 16)
+    seconds = string.sub(PIRVRumLastUpdateTimeString, 18, 19)
+    PIRVRumLastUpdateTime = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
+    
+    -- Last updated PIR device in seconds
+    LastUpdateDevice = math.max(PIRUppeLastUpdateTime, PIRKitchenLastUpdateTime, PIRVRumLastUpdateTime)
+
+    -- Compare current time with last updated device
+    difference = (os.difftime (currentTime, LastUpdateDevice)) 
+    
+--    print("SwitchSovdagsLastUpdateTimeString: " .. SwitchSovdagsLastUpdateTimeString)
+    
+--    print("currentTime: " .. currentTime)
+--    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
+--    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
+--    print("SwitchSovdagsLastUpdateTime + 5h: " .. SwitchSovdagsLastUpdateTime+5*60*60)
+    
 --        if (currentTime > (SwitchSovdagsLastUpdateTime + 6.5*60*60)) then
 --    --        print("IF-statement")
 --            
@@ -132,11 +132,10 @@ SWITCH_DEVICE = 'Sovdags'
 --            --    commandArray['SendEmail']=''..cmd..' äldre än 40 min#'..s..' är senaste tid#abc@hotmail.com' --send mail
 --            end
 --        end
-        
-        return difference
-    end
     
-if (DEBUG_MODE) then
+    return difference
+end
+    
 --        print("SwitchLastUpdateString: " .. SwitchLastUpdateString)
 --        print("RFIDLastUpdateTime: " .. DeviceLastUpdateTime)
 
@@ -171,74 +170,76 @@ if (DEBUG_MODE) then
 ---        
 ---        end
 
-    -- 2017-02-23 21:57:37.554 LUA: It is a weekday! Yey!
-    -- Weekday (Fridays are excluded.. =))
-    if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 4)) then
-        -- print("It is a weekday! Yey!")
+-- 2017-02-23 21:57:37.554 LUA: It is a weekday! Yey!
+-- Weekday (Fridays are excluded.. =))
+if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", currentTime)) <= 4)) then
+    -- print("It is a weekday! Yey!")
 
-        -- Current Time is more/after 22:15
-        -- %M	minute (48) [00-59]
-        if (
-            ((tonumber(os.date("%H", currentTime)) >= 22) and (tonumber(os.date("%M", currentTime)) >= 15))
-            or (tonumber(os.date("%H", currentTime)) > 23)) then
-            -- print(">= 22: " .. tonumber(os.date("%H", currentTime)))
+    -- Current Time is more/after 22:15
+    -- %M	minute (48) [00-59]
+    if (
+        ((tonumber(os.date("%H", currentTime)) >= 22) and (tonumber(os.date("%M", currentTime)) >= 15))
+        or (tonumber(os.date("%H", currentTime)) > 23)) then
+        -- print(">= 22: " .. tonumber(os.date("%H", currentTime)))
 
-            -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
-            if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
-                --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
+        -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
+        if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
+            if (DEBUG_MODE) then
+                print("(DeviceLastUpdateTime - currentTime > 23*60*60): " .. (currentTime - DeviceLastUpdateTime))
+            end
 
-                --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
-                ---- E.g. 20-25m..?
+            --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
+            ---- E.g. 20-25m..?
 
-                -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
-                -- We have had NO PIR activity for the last X = 35 minutes
-                if (timeSinceLastPIRActivity(currentTime) > 35*60) then
-                    print("No PIR Activity in the last 35 minutes!")
+            -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
+            -- We have had NO PIR activity for the last X = 35 minutes
+            if (timeSinceLastPIRActivity(currentTime) > 35*60) then
+                print("No PIR Activity in the last 35 minutes!")
 
-                    print("Smart Automatic Night Script!")
-                    
-                    currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
+                print("Smart Automatic Night Script!")
+                
+                currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
 
-                    -- Send Notification
-                    commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
+                -- Send Notification
+                commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
 
-                    --- TOGGLE "Sovdags"
-                    commandArray["Sovdags"] = "On"
-                end
+                --- TOGGLE "Sovdags"
+                commandArray["Sovdags"] = "On"
             end
         end
-    -- It is not a weekday! (Fridays are includeded as weekends.. =))
-    else
-        -- It's a weekend! Yey!    
-        -- %H	hour, using a 24-hour clock (23) [00-23]
-        if (tonumber(os.date("%H", currentTime)) >= 23) then
-            -- print(">= 23: " .. tonumber(os.date("%H", currentTime)))
-            -- TOGGLE Sovdags!? If it hasn't been toggled the last 2x hours!?
-            
-            -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
-            if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
-                --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
+    end
+-- It is not a weekday! (Fridays are includeded as weekends.. =))
+else
+    -- It's a weekend! Yey!    
+    -- %H	hour, using a 24-hour clock (23) [00-23]
+    if (tonumber(os.date("%H", currentTime)) >= 23) then
+        -- print(">= 23: " .. tonumber(os.date("%H", currentTime)))
+        -- TOGGLE Sovdags!? If it hasn't been toggled the last 2x hours!?
+        
+        -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
+        if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
+            --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
 
-                --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
-                ---- E.g. 20-25m..?
+            --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
+            ---- E.g. 20-25m..?
 
-                -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
-                -- We have had NO PIR activity for the last X = 60 minutes
-                if (timeSinceLastPIRActivity(currentTime) > 60*60) then
-                    print("No PIR Activity in the last 60 minutes!")
+            -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
+            -- We have had NO PIR activity for the last X = 60 minutes
+            if (timeSinceLastPIRActivity(currentTime) > 60*60) then
+                print("No PIR Activity in the last 60 minutes!")
 
-                    print("Smart Automatic Night Script!")
-                    
-                    currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
+                print("Smart Automatic Night Script!")
+                
+                currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
 
-                    -- Send Notification
-                    commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
+                -- Send Notification
+                commandArray['SendNotification']='Night#Smart Automatic Night has been triggered ' .. currentTimeString ..'!##0'
 
-                    --- TOGGLE "Sovdags"
-                    commandArray["Sovdags"] = "On"
-                end
+                --- TOGGLE "Sovdags"
+                commandArray["Sovdags"] = "On"
             end
         end
     end
 end
+
 return commandArray
