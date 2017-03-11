@@ -220,6 +220,12 @@ else
         if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
             --print("(DeviceLastUpdateTime - currentTime > 18*60*60): " .. (currentTime - DeviceLastUpdateTime))
 
+                
+                --- TODO:
+                --- 1) If after 00:00 then no PIR activity the last 30 min?
+                --- 2) IF after 01:00 then no PIR activity the last 20 min?
+
+
             --- NOTE! Maybe Time > 23? timeSinceLastPIRActivity could be lower..?
             ---- E.g. 20-25m..?
 
