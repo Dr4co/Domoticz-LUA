@@ -24,9 +24,10 @@
 --
 commandArray = {}
 
+DEBUG = false;
+
 if (devicechanged ~= nil) then
-    -- Debug purposes
-    -- print(devicechanged['Dummy Selector Switch']) 
+
     currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
 
     AlarmIsArmed = false;
@@ -41,9 +42,7 @@ if (devicechanged ~= nil) then
     end
     
     if (devicechanged['Utomhus Switch'] ~= nil) then
-        -- DEBUG
-        -- print("devicechanged['Utomhus Switch']: " .. devicechanged['Utomhus Switch'])
-
+        
         -- Syntax: The total command is:
         --- commandArray['SendNotification']='subject#body#extraData#priority#sound'
         commandArray['SendNotification']='Utomhus#Utomhus Swich ' .. devicechanged['Utomhus Switch'] .. ' ' .. currentTimeString ..'!##0'
@@ -74,10 +73,7 @@ if (devicechanged ~= nil) then
                 commandArray['SendNotification']='Dörr#Altandörr Stängs ' .. currentTimeString ..'!##0'    
             end
         end
-    
-        --- DEBUG
-        --- print(otherdevices['Altandörr Bak'])
-        
+
         if (devicechanged['Altandörr Bak'] ~= nil) then
             if (devicechanged['Altandörr Bak'] == 'On') then
                 commandArray['SendNotification']='Dörr#Altandörr Bak Öppen ' .. currentTimeString ..'!##0'    
