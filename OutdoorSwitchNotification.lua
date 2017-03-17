@@ -29,57 +29,63 @@ if (devicechanged ~= nil) then
     -- print(devicechanged['Dummy Selector Switch']) 
     currentTimeString = os.date("%Y-%m-%d %H:%M:%S") 
 
+    AlarmIsArmed = false;
+    DisableNotifications = false;
+    
+    if(globalvariables['Security'] == 'Armed Away') then
+        AlarmIsArmed = true;
+    end
+    
+    if (otherdevices['Presence'] == 'On') then
+        DisableNotifications = true;
+    end
+    
     if (devicechanged['Utomhus Switch'] ~= nil) then
         -- DEBUG
         -- print("devicechanged['Utomhus Switch']: " .. devicechanged['Utomhus Switch'])
-
--- 2017-01-17 20:43:07.817 User: Admin initiated a switch command (34/Utomhus Switch/Off)
--- 2017-01-17 20:43:07.817 OpenZWave: Domoticz has send a Switch command! NodeID: 5 (0x05)
--- 2017-01-17 20:43:07.848 LUA: devicechanged['Utomhus Switch']: Off
--- 2017-01-17 20:43:07.848 EventSystem: Script event triggered: UtomhusSwitchNotification
--- 2017-01-17 20:43:07.817 (Z-Stick) Light/Switch (Utomhus Switch)
--- 2017-01-17 20:43:09.363 Notification sent (http) => Success
--- 2017-01-17 20:43:15.035 User: Admin initiated a switch command (34/Utomhus Switch/On)
--- 2017-01-17 20:43:15.035 OpenZWave: Domoticz has send a Switch command! NodeID: 5 (0x05)
--- 2017-01-17 20:43:15.067 LUA: devicechanged['Utomhus Switch']: On
--- 2017-01-17 20:43:15.067 EventSystem: Script event triggered: UtomhusSwitchNotification
--- 2017-01-17 20:43:15.035 (Z-Stick) Light/Switch (Utomhus Switch)
--- 2017-01-17 20:43:15.692 (Fjärris) Temp + Humidity (Krypgrund 2)
--- 2017-01-17 20:43:16.567 Notification sent (http) => Success
--- 2017-01-17 20:43:19.817 (Fjärris) Temp + Humidity (Krypgrund 1)
 
         -- Syntax: The total command is:
         --- commandArray['SendNotification']='subject#body#extraData#priority#sound'
         commandArray['SendNotification']='Utomhus#Utomhus Swich ' .. devicechanged['Utomhus Switch'] .. ' ' .. currentTimeString ..'!##0'
     end
+
+    --[[
+        Only send DOOR notifications if the Alarm Panel is set to 'Arm Away'.
+        
+        'Dummy' switch named 'Presence', will manually override the notifications,
+        and disable notifications, as long as it is 'On'.
+        
+        Unless the Alarm Panel is set to 'Arm Away', then DOOR notifications shall
+        always be received!
+    --]]
+    if (AlarmIsArmed or not DisableNotifications) then
+        if (devicechanged['Ytterdörr'] ~= nil) then
+            if (devicechanged['Ytterdörr'] == 'On') then
+                commandArray['SendNotification']='Dörr#Ytterdörren Öppen ' .. currentTimeString ..'!##0'    
+            else
+                commandArray['SendNotification']='Dörr#Ytterdörren Stängs ' .. currentTimeString ..'!##0'    
+            end
+        end
     
-    if (devicechanged['Ytterdörr'] ~= nil) then
-        if (devicechanged['Ytterdörr'] == 'On') then
-            commandArray['SendNotification']='Dörr#Ytterdörren Öppen ' .. currentTimeString ..'!##0'    
-        else
-            commandArray['SendNotification']='Dörr#Ytterdörren Stängs ' .. currentTimeString ..'!##0'    
+        if (devicechanged['Altandörr'] ~= nil) then
+            if (devicechanged['Altandörr'] == 'On') then
+                commandArray['SendNotification']='Dörr#Altandörr Öppen ' .. currentTimeString ..'!##0'    
+            else
+                commandArray['SendNotification']='Dörr#Altandörr Stängs ' .. currentTimeString ..'!##0'    
+            end
         end
-    end
-
-    if (devicechanged['Altandörr'] ~= nil) then
-        if (devicechanged['Altandörr'] == 'On') then
-            commandArray['SendNotification']='Dörr#Altandörr Öppen ' .. currentTimeString ..'!##0'    
-        else
-            commandArray['SendNotification']='Dörr#Altandörr Stängs ' .. currentTimeString ..'!##0'    
-        end
-    end
-
-    --- DEBUG
-    --- print(otherdevices['Altandörr Bak'])
     
-    if (devicechanged['Altandörr Bak'] ~= nil) then
-        if (devicechanged['Altandörr Bak'] == 'On') then
-            commandArray['SendNotification']='Dörr#Altandörr Bak Öppen ' .. currentTimeString ..'!##0'    
-        else
-            commandArray['SendNotification']='Dörr#Altandörr Bak Stängs ' .. currentTimeString ..'!##0'    
+        --- DEBUG
+        --- print(otherdevices['Altandörr Bak'])
+        
+        if (devicechanged['Altandörr Bak'] ~= nil) then
+            if (devicechanged['Altandörr Bak'] == 'On') then
+                commandArray['SendNotification']='Dörr#Altandörr Bak Öppen ' .. currentTimeString ..'!##0'    
+            else
+                commandArray['SendNotification']='Dörr#Altandörr Bak Stängs ' .. currentTimeString ..'!##0'    
+            end
         end
     end
-
 end
 
 return commandArray
