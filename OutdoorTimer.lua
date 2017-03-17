@@ -68,6 +68,15 @@ if (minutesnow == timeofday['SunsetInMinutes'] + 18) then
     end
 end
 
+-- Turn on the BACK outdoor light "After Sunset" + 28 minutes
+-- Everyday! By design!
+-- Since no condition is added to check weekday/weekend at the moment...
+if (minutesnow == timeofday['SunsetInMinutes'] + 28) then
+    if (otherdevices['Utomhus Baksidan'] ~= 'On') then
+        commandArray['Utomhus Baksidan'] = 'On'
+    end
+end
+
 -- Domoticz: Date & Time / Sunrise / Sunset
 -- 2017-03-17 21:52:42 ☀▲05:57 ▼17:53
 
@@ -75,17 +84,19 @@ end
 -- 357 % 60 = 5h + 57 => 5:57 = timeofday['SunriseInMinutes']
 -- 2017-03-17 22:16:36.346 LUA: timeofday['SunriseInMinutes']: 357
 
-if (DEBUG) then    
-    print("timeofday['SunriseInMinutes']: " .. timeofday['SunriseInMinutes'])
-end
+    
+    -- print("timeofday['SunriseInMinutes']: " .. timeofday['SunriseInMinutes'])
 
--- Turn on the FRONT outdoor light "Before Sunrise" - 15 minutes
+-- Turn on the outdoor lights "Before Sunrise" - 15 minutes
 -- Everyday! By design!
 -- Since no condition is added to check weekday/weekend at the moment...
---if (minutesnow == timeofday['SunriseInMinutes'] - 15) then
 if (minutesnow == timeofday['SunriseInMinutes'] - 15) then
     if (otherdevices['Utomhus Switch'] ~= 'Off') then
         commandArray['Utomhus Switch'] = 'Off'
+    end
+    
+    if (otherdevices['Utomhus Baksidan'] ~= 'Off') then
+        commandArray['Utomhus Baksidan'] = 'Off'
     end
 end
 
