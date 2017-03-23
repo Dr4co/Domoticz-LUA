@@ -72,6 +72,7 @@ end
 -- Everyday! By design!
 -- Since no condition is added to check weekday/weekend at the moment...
 if (minutesnow == timeofday['SunsetInMinutes'] + 28) then
+    
     if (otherdevices['Utomhus Baksidan'] ~= 'On') then
         commandArray['Utomhus Baksidan'] = 'On'
     end
@@ -101,3 +102,8 @@ if (minutesnow == timeofday['SunriseInMinutes'] - 15) then
 end
 
 return commandArray
+
+
+--- TODO: Add logic: REPLACE "On Time" Timer! E.g. 5:45.
+---                 ONLY IF Before Sunrise + X [15] minutes =< Sunrise Time
+---                    OTHERWISE DO NOT Turn on Outdoor ligth!
