@@ -59,12 +59,13 @@ currentTime = os.time() --get date/time right now in seconds
 
 ----------------------- LUA Wiki TIME
 ----------- https://www.lua.org/pil/22.1.html
--- %w	weekday (3) [0-6 = Sunday-Saturday]
+-- %w   weekday (3) [0-6 = Sunday-Saturday]
 
 -- Turn on debugging by changing this variable to {true}, otherwise {false}.
-DEBUG_MODE = false
+DEBUG = false
+LOG_LEVEL = "NONE" -- {"NONE", "INFO", "DEBUG"}
 
--- Your RFID Device Name
+-- Dummy "Virtual" Device, which will turn of all Light Switches
 SWITCH_DEVICE = 'Sovdags'
 
 
@@ -116,22 +117,13 @@ function timeSinceLastPIRActivity(currentTime)
     -- Compare current time with last updated device
     difference = (os.difftime (currentTime, LastUpdateDevice)) 
     
---    print("SwitchSovdagsLastUpdateTimeString: " .. SwitchSovdagsLastUpdateTimeString)
-    
---    print("currentTime: " .. currentTime)
---    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
---    print("SwitchSovdagsLastUpdateTime: " .. SwitchSovdagsLastUpdateTime)
---    print("SwitchSovdagsLastUpdateTime + 5h: " .. SwitchSovdagsLastUpdateTime+5*60*60)
-    
---        if (currentTime > (SwitchSovdagsLastUpdateTime + 6.5*60*60)) then
---    --        print("IF-statement")
---            
---                --    if (difference > 30*60) and (uservariables[cmd] == 0) then --if device date/time is more than 30 minutes
---            if (difference > 30*60) then --if device date/time is more than 30 minutes        
---            --    file = io.open("sensor.txt", "a") -- Opens a file named sensor.txt(stored under Domoticz folder) in append mode
---            --    commandArray['SendEmail']=''..cmd..' äldre än 40 min#'..s..' är senaste tid#abc@hotmail.com' --send mail
---            end
---        end
+    if (LOG_LEVEL == "DEBUG") then
+        print("SwitchLastUpdateString: " .. SwitchLastUpdateString)
+
+        print("currentTime: " .. currentTime)
+        print("DeviceLastUpdateTime: " .. DeviceLastUpdateTime)
+        print("DeviceLastUpdateTime + 5h: " .. DeviceLastUpdateTime+5*60*60)
+    end
     
     return difference
 end
@@ -147,7 +139,7 @@ end
 --        print("Hour: " .. hour)
 --        print("minutes: " .. minutes)
     
-    -- %w	weekday (3) [0-6 = Sunday-Saturday]
+    -- %w   weekday (3) [0-6 = Sunday-Saturday]
     
     -- 2017-02-23 21:52:44.007 LUA: DeviceLastUpdateTime (weekday): 3
 --        print("DeviceLastUpdateTime (weekday): " .. os.date("%w", DeviceLastUpdateTime))
@@ -176,7 +168,7 @@ if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", curr
     -- print("It is a weekday! Yey!")
 
     -- Current Time is more/after 22:15
-    -- %M	minute (48) [00-59]
+    -- %M   minute (48) [00-59]
     if (
         ((tonumber(os.date("%H", currentTime)) >= 22) and (tonumber(os.date("%M", currentTime)) >= 15))
         or (tonumber(os.date("%H", currentTime)) > 23)) then
@@ -184,7 +176,7 @@ if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", curr
 
         -- It has gone more than X hours [X = 23] since "Sovdags" has been triggered
         if((currentTime - DeviceLastUpdateTime) > 23*60*60) then
-            if (DEBUG_MODE) then
+            if (LOG_LEVEL == "DEBUG") then
                 print("(DeviceLastUpdateTime - currentTime > 23*60*60): " .. (currentTime - DeviceLastUpdateTime))
             end
 
@@ -211,7 +203,7 @@ if ((tonumber(os.date("%w", currentTime)) >= 1) and (tonumber(os.date("%w", curr
 -- It is not a weekday! (Fridays are includeded as weekends.. =))
 else
     -- It's a weekend! Yey!    
-    -- %H	hour, using a 24-hour clock (23) [00-23]
+    -- %H   hour, using a 24-hour clock (23) [00-23]
     if (tonumber(os.date("%H", currentTime)) >= 23) then
         -- print(">= 23: " .. tonumber(os.date("%H", currentTime)))
         -- TOGGLE Sovdags!? If it hasn't been toggled the last 2x hours!?
