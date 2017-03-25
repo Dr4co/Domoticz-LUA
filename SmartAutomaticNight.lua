@@ -230,9 +230,9 @@ else
             ---- E.g. 20-25m..?
 
             -- DO NOT Trigger the "Sovdags" Dummy Swich UNLESS
-            -- We have had NO PIR activity for the last X = 60 minutes
-            if (timeSinceLastPIRActivity(currentTime) > 60*60) then
-                print("No PIR Activity in the last 60 minutes!")
+            -- We have had NO PIR activity for the last X = 30 minutes
+            if (timeSinceLastPIRActivity(currentTime) > 30*60) then
+                print("No PIR Activity in the last 30 minutes!")
 
                 print("Smart Automatic Night Script!")
                 
